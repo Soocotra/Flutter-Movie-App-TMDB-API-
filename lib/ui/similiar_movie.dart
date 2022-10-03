@@ -5,8 +5,8 @@ import 'package:movie_app/ui/movies_card.dart';
 import 'package:movie_app/ui/skeleton_loading.dart';
 
 class SimiliarMovies extends StatelessWidget {
-  int movieId;
-  SimiliarMovies({
+  final int movieId;
+  const SimiliarMovies({
     Key? key,
     required this.movieId,
   }) : super(key: key);

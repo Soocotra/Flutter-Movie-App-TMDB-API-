@@ -105,63 +105,75 @@ class _HomePageState extends State<HomePage> {
                         topLeft: Radius.circular(30),
                         topRight: Radius.circular(30))),
             duration: const Duration(milliseconds: 200),
-            child: SingleChildScrollView(
-              child: isSearch
-                  ? SearchTextBox(
-                      onPressed: () {
-                        setState(() {
-                          isSearch = false;
-                        });
-                      },
-                    )
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 29.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              TextButton(
-                                onPressed: () {
-                                  showModalBottomSheet(
-                                      elevation: 10,
-                                      useSafeArea: true,
-                                      shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(10),
-                                              topRight: Radius.circular(10))),
-                                      isDismissible: true,
-                                      context: context,
-                                      builder: (context) => Wrap(
-                                            children: [
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+            child: StretchingOverscrollIndicator(
+              axisDirection: AxisDirection.down,
+              child: ScrollConfiguration(
+                behavior: const ScrollBehavior().copyWith(overscroll: false),
+                child: SingleChildScrollView(
+                  child: isSearch
+                      ? SearchTextBox(
+                          onPressed: () {
+                            setState(() {
+                              isSearch = false;
+                            });
+                          },
+                        )
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 29.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  TextButton(
+                                    onPressed: () {
+                                      showModalBottomSheet(
+                                          elevation: 10,
+                                          useSafeArea: true,
+                                          shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(10),
+                                                  topRight:
+                                                      Radius.circular(10))),
+                                          isDismissible: true,
+                                          context: context,
+                                          builder: (context) => Wrap(
                                                 children: [
-                                                  const Padding(
-                                                    padding: EdgeInsets.only(
-                                                        left: 16, top: 20),
-                                                    child: Text(
-                                                      'Features',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          fontSize: 20),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 8.0,
-                                                            left: 7,
-                                                            bottom: 50),
-                                                    child: ListView.builder(
-                                                      shrinkWrap: true,
-                                                      itemCount: modalBottomItem
-                                                          .length,
-                                                      itemBuilder:
-                                                          (context, index) =>
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      const Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                left: 16,
+                                                                top: 20),
+                                                        child: Text(
+                                                          'Features',
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                              fontSize: 20),
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                top: 8.0,
+                                                                left: 7,
+                                                                bottom: 50),
+                                                        child: ListView.builder(
+                                                          shrinkWrap: true,
+                                                          itemCount:
+                                                              modalBottomItem
+                                                                  .length,
+                                                          itemBuilder: (context,
+                                                                  index) =>
                                                               SizedBox(
                                                                   height: 50,
                                                                   child:
@@ -182,56 +194,59 @@ class _HomePageState extends State<HomePage> {
                                                                         modalBottomItem[
                                                                             index]),
                                                                   )),
-                                                    ),
-                                                  ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )
                                                 ],
-                                              )
-                                            ],
-                                          ));
-                                },
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      feature,
-                                      style: const TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w600),
+                                              ));
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          feature,
+                                          style: const TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                        const Icon(Icons.arrow_drop_down)
+                                      ],
                                     ),
-                                    const Icon(Icons.arrow_drop_down)
-                                  ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                                height: 330,
+                                padding:
+                                    const EdgeInsets.only(top: 16, bottom: 30),
+                                child: moviesBuilder(
+                                    category: feature, listType: 'listview')),
+                            const Padding(
+                              padding: EdgeInsets.only(left: 12, top: 10),
+                              child: Text(
+                                'Upcoming Movies',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 24),
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width,
+                                child: moviesBuilder(
+                                  category: 'Upcoming',
+                                  listType: 'tiles',
                                 ),
                               ),
-                            ],
-                          ),
+                            )
+                          ],
                         ),
-                        Container(
-                            height: 330,
-                            padding: const EdgeInsets.only(top: 16, bottom: 30),
-                            child: moviesBuilder(
-                                category: feature, listType: 'listview')),
-                        const Padding(
-                          padding: EdgeInsets.only(left: 12, top: 10),
-                          child: Text(
-                            'Upcoming Movies',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 24),
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            child: moviesBuilder(
-                              category: 'Upcoming',
-                              listType: 'tiles',
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
+                ),
+              ),
             )));
   }
 

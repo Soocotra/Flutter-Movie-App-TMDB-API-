@@ -6,9 +6,9 @@ import 'package:movie_app/api_config/config.dart';
 import 'package:movie_app/ui/similiar_movie.dart';
 
 class DetailPage extends StatefulWidget {
-  int movieId;
+  final int movieId;
 
-  DetailPage({
+  const DetailPage({
     Key? key,
     required this.movieId,
   }) : super(key: key);

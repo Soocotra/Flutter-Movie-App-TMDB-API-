@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:movie_app/api_config/api_service.dart';
-import 'package:movie_app/api_config/config.dart';
-import 'package:movie_app/model/movies_page.dart';
 import 'package:movie_app/ui/movies_card.dart';
 import 'package:movie_app/ui/skeleton_loading.dart';
 
@@ -113,6 +111,5 @@ class _SearchTextBoxState extends State<SearchTextBox> {
             : searchBuilder('$querySearch')
       ],
     );
-    ;
   }
 }
