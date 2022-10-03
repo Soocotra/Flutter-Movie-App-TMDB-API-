@@ -94,112 +94,122 @@ class _DetailPageState extends State<DetailPage> {
                 Container(
                   color: HexColor('#2C3848'),
                 ),
-                SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 170.0, left: 24),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: 223,
-                          width: MediaQuery.of(context).size.width,
-                          child: Row(
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: Image.network(
-                                  '${ApiConfig.imageUrl}${snapshot.data?.poster_path}',
-                                ),
-                              ),
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 16.0, bottom: 20),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        '${snapshot.data?.title}',
-                                        style: const TextStyle(
-                                            fontSize: 18,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        genres.join(', '),
-                                        style: const TextStyle(
-                                            fontSize: 11,
-                                            fontWeight: FontWeight.w300,
-                                            color: Colors.white),
-                                      ),
-                                      const SizedBox(
-                                        height: 16,
-                                      ),
-                                      Row(
+                StretchingOverscrollIndicator(
+                  axisDirection: AxisDirection.down,
+                  child: ScrollConfiguration(
+                    behavior:
+                        const ScrollBehavior().copyWith(overscroll: false),
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 170.0, left: 24),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 223,
+                              width: MediaQuery.of(context).size.width,
+                              child: Row(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: Image.network(
+                                      '${ApiConfig.imageUrl}${snapshot.data?.poster_path}',
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 16.0, bottom: 20),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          Icon(
-                                            Icons.star,
-                                            size: 16,
-                                            color: HexColor('#FFF700'),
+                                          Text(
+                                            '${snapshot.data?.title}',
+                                            style: const TextStyle(
+                                                fontSize: 18,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
                                           ),
                                           const SizedBox(
-                                            width: 5,
+                                            height: 5,
                                           ),
                                           Text(
-                                            '${(snapshot.data?.vote_average).toStringAsFixed(1)}',
+                                            genres.join(', '),
                                             style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 11),
+                                                fontSize: 11,
+                                                fontWeight: FontWeight.w300,
+                                                color: Colors.white),
+                                          ),
+                                          const SizedBox(
+                                            height: 16,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Icon(
+                                                Icons.star,
+                                                size: 16,
+                                                color: HexColor('#FFF700'),
+                                              ),
+                                              const SizedBox(
+                                                width: 5,
+                                              ),
+                                              Text(
+                                                '${(snapshot.data?.vote_average).toStringAsFixed(1)}',
+                                                style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 11),
+                                              )
+                                            ],
                                           )
                                         ],
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.only(top: 34, bottom: 24),
+                              child: Text(
+                                'StoryBoard',
+                                style: TextStyle(
+                                    fontSize: 16, color: Colors.white),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 312,
+                              child: Text(
+                                snapshot.data?.overview,
+                                style: const TextStyle(
+                                    height: 1.3,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w300,
+                                    color: Colors.white),
+                              ),
+                            ),
+                            const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 20),
+                                child: Text(
+                                  'Similar Movies',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600),
+                                )),
+                            SizedBox(
+                                height: 330,
+                                child:
+                                    SimiliarMovies(movieId: snapshot.data?.id)),
+                            const SizedBox(
+                              height: 30,
+                            )
+                          ],
                         ),
-                        const Padding(
-                          padding: EdgeInsets.only(top: 34, bottom: 24),
-                          child: Text(
-                            'StoryBoard',
-                            style: TextStyle(fontSize: 16, color: Colors.white),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 312,
-                          child: Text(
-                            snapshot.data?.overview,
-                            style: const TextStyle(
-                                height: 1.3,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w300,
-                                color: Colors.white),
-                          ),
-                        ),
-                        const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 20),
-                            child: Text(
-                              'Similar Movies',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w600),
-                            )),
-                        SizedBox(
-                            height: 330,
-                            child: SimiliarMovies(movieId: snapshot.data?.id)),
-                        const SizedBox(
-                          height: 30,
-                        )
-                      ],
+                      ),
                     ),
                   ),
                 )
