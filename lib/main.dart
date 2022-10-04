@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:movie_app/ui/home_page.dart';
 
 void main() {
-  runApp((MyApp()));
+  runApp((const MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -19,7 +19,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       theme: ThemeData(textTheme: GoogleFonts.montserratTextTheme()),
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: const HomePage(),
     );
   }
 }
