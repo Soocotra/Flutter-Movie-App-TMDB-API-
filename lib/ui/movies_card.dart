@@ -11,6 +11,7 @@ Widget moviesCard(
     required String category,
     required BuildContext context}) {
   return ListView.builder(
+    padding: const EdgeInsets.only(left: 24),
     scrollDirection: Axis.horizontal,
     itemCount: movieData.data?.results.length,
     itemBuilder: (context, index) {
@@ -84,7 +85,9 @@ Widget movieTiles(AsyncSnapshot<dynamic> snapshot, BuildContext context) =>
     ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      itemCount: snapshot.data?.results.length,
+      itemCount: snapshot.data?.results.length > 5
+          ? 5
+          : snapshot.data?.resulsts.length,
       itemBuilder: (context, index) {
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 20),

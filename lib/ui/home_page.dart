@@ -17,24 +17,30 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool isSearch = false;
-
+  final mainPageKey = GlobalKey();
+  bool _isSearch = false;
+  double? scrollOffset;
   final List<String> modalBottomItem = [
     'Now playing',
     'Top Rated',
     'Popular',
     'Trending'
   ];
-
   late String feature = modalBottomItem[0];
+
+  Future scrollToItem(BuildContext context) async {
+    final context = mainPageKey.currentContext;
+
+    await Scrollable.ensureVisible(context!);
+  }
 
   @override
   Widget build(BuildContext context) {
     return DoubleBack(
-      condition: isSearch == false,
+      condition: _isSearch == false,
       onConditionFail: () {
         setState(() {
-          isSearch = false;
+          _isSearch = false;
         });
       },
       message: "Press again to back",
@@ -42,14 +48,29 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: HexColor('#198ADF'),
           body: SafeArea(
             child: RefreshIndicator(
-              onRefresh: () {
-                setState(() {});
-                return Future<void>.delayed(const Duration(seconds: 2));
-              },
-              child: Column(
-                children: [isSearch ? Container() : homeHeader(), mainPage()],
-              ),
-            ),
+                onRefresh: () {
+                  setState(() {});
+
+                  return Future<void>.delayed(const Duration(seconds: 2));
+                },
+                child: StretchingOverscrollIndicator(
+                  axisDirection: AxisDirection.down,
+                  child: CustomScrollView(
+                    physics:
+                        _isSearch ? const NeverScrollableScrollPhysics() : null,
+                    scrollBehavior:
+                        const ScrollBehavior().copyWith(overscroll: false),
+                    slivers: [
+                      SliverAppBar(
+                        flexibleSpace:
+                            _isSearch ? searchBar(context) : homeHeader(),
+                        collapsedHeight: 150,
+                      ),
+                      SliverList(
+                          delegate: SliverChildListDelegate([mainPage()]))
+                    ],
+                  ),
+                )),
           )),
     );
   }
@@ -79,8 +100,9 @@ class _HomePageState extends State<HomePage> {
       child: Center(
         child: GestureDetector(
           onTap: (() {
+            scrollToItem(context);
             setState(() {
-              isSearch = true;
+              _isSearch = true;
             });
           }),
           child: Container(
@@ -111,88 +133,78 @@ class _HomePageState extends State<HomePage> {
   Widget mainPage() {
     return Expanded(
         child: AnimatedContainer(
-            height: isSearch ? MediaQuery.of(context).size.height : null,
+            key: mainPageKey,
+            height: _isSearch ? MediaQuery.of(context).size.height : null,
             padding: EdgeInsets.only(
-              left: isSearch ? 10 : 24,
+              left: _isSearch ? 10 : 0,
               top: 23,
             ),
             decoration: BoxDecoration(
                 color: HexColor('#2C3848'),
-                borderRadius: isSearch
+                borderRadius: _isSearch
                     ? null
                     : const BorderRadius.only(
                         topLeft: Radius.circular(30),
                         topRight: Radius.circular(30))),
             duration: const Duration(milliseconds: 200),
-            child: StretchingOverscrollIndicator(
-              axisDirection: AxisDirection.down,
-              child: ScrollConfiguration(
-                behavior: const ScrollBehavior().copyWith(overscroll: false),
-                child: SingleChildScrollView(
-                  child: isSearch
-                      ? SearchTextBox(
-                          onPressed: () {
-                            setState(() {
-                              isSearch = false;
-                            });
-                          },
-                        )
-                      : Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(right: 29.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  TextButton(
-                                    onPressed: () {
-                                      showModalBottomSheet(
-                                          elevation: 10,
-                                          useSafeArea: true,
-                                          shape: const RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(10),
-                                                  topRight:
-                                                      Radius.circular(10))),
-                                          isDismissible: true,
-                                          context: context,
-                                          builder: (context) => Wrap(
+            child: _isSearch
+                ? SearchTextBox(
+                    onPressed: () {
+                      setState(() {
+                        _isSearch = false;
+                      });
+                    },
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 29.0),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 24.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextButton(
+                                onPressed: () {
+                                  showModalBottomSheet(
+                                      elevation: 10,
+                                      useSafeArea: true,
+                                      shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(10),
+                                              topRight: Radius.circular(10))),
+                                      isDismissible: true,
+                                      context: context,
+                                      builder: (context) => Wrap(
+                                            children: [
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
-                                                  Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      const Padding(
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                                left: 16,
-                                                                top: 20),
-                                                        child: Text(
-                                                          'Features',
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600,
-                                                              fontSize: 20),
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                top: 8.0,
-                                                                left: 7,
-                                                                bottom: 50),
-                                                        child: ListView.builder(
-                                                          shrinkWrap: true,
-                                                          itemCount:
-                                                              modalBottomItem
-                                                                  .length,
-                                                          itemBuilder: (context,
-                                                                  index) =>
+                                                  const Padding(
+                                                    padding: EdgeInsets.only(
+                                                        left: 16, top: 20),
+                                                    child: Text(
+                                                      'Features',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          fontSize: 20),
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 8.0,
+                                                            left: 7,
+                                                            bottom: 50),
+                                                    child: ListView.builder(
+                                                      shrinkWrap: true,
+                                                      itemCount: modalBottomItem
+                                                          .length,
+                                                      itemBuilder:
+                                                          (context, index) =>
                                                               SizedBox(
                                                                   height: 50,
                                                                   child:
@@ -213,60 +225,57 @@ class _HomePageState extends State<HomePage> {
                                                                         modalBottomItem[
                                                                             index]),
                                                                   )),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  )
+                                                    ),
+                                                  ),
                                                 ],
-                                              ));
-                                    },
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          feature,
-                                          style: const TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                        const Icon(Icons.arrow_drop_down)
-                                      ],
+                                              )
+                                            ],
+                                          ));
+                                },
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      feature,
+                                      style: const TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w600),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                                height: 330,
-                                padding:
-                                    const EdgeInsets.only(top: 16, bottom: 30),
-                                child: moviesBuilder(
-                                    category: feature, listType: 'listview')),
-                            const Padding(
-                              padding: EdgeInsets.only(left: 12, top: 10),
-                              child: Text(
-                                'Upcoming Movies',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 24),
-                              child: SizedBox(
-                                width: MediaQuery.of(context).size.width,
-                                child: moviesBuilder(
-                                  category: 'Upcoming',
-                                  listType: 'tiles',
+                                    const Icon(Icons.arrow_drop_down)
+                                  ],
                                 ),
                               ),
-                            )
-                          ],
+                            ],
+                          ),
                         ),
-                ),
-              ),
-            )));
+                      ),
+                      Container(
+                          height: 330,
+                          padding: const EdgeInsets.only(top: 16, bottom: 30),
+                          child: moviesBuilder(
+                              category: feature, listType: 'listview')),
+                      const Padding(
+                        padding: EdgeInsets.only(left: 22, top: 10),
+                        child: Text(
+                          'Upcoming Movies',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 24),
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: moviesBuilder(
+                            category: 'Upcoming',
+                            listType: 'tiles',
+                          ),
+                        ),
+                      )
+                    ],
+                  )));
   }
 
   FutureBuilder<Object?> moviesBuilder(
