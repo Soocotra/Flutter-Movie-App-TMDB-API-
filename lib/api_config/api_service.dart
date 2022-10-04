@@ -15,7 +15,7 @@ abstract class ApiService {
       var response = await Dio().get(url);
       return MoviesPage.fromJson(response.data);
     } catch (e) {
-      print(e);
+      throw Exception(e);
     }
   }
 

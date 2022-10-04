@@ -38,9 +38,11 @@ dependencies:
   double_back_to_close: ^2.0.0
   flutter:
     sdk: flutter
+  flutter_rating_bar: ^4.0.1
   flutter_shimmer: ^2.1.2
   google_fonts: ^3.0.1
   hexcolor: ^3.0.1
+  intl: ^0.17.0
   json_annotation: ^4.7.0
   json_serializable: ^6.4.1
   skeletons: ^0.0.3

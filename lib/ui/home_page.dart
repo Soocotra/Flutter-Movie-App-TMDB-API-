@@ -131,151 +131,147 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget mainPage() {
-    return Expanded(
-        child: AnimatedContainer(
-            key: mainPageKey,
-            height: _isSearch ? MediaQuery.of(context).size.height : null,
-            padding: EdgeInsets.only(
-              left: _isSearch ? 10 : 0,
-              top: 23,
-            ),
-            decoration: BoxDecoration(
-                color: HexColor('#2C3848'),
-                borderRadius: _isSearch
-                    ? null
-                    : const BorderRadius.only(
-                        topLeft: Radius.circular(30),
-                        topRight: Radius.circular(30))),
-            duration: const Duration(milliseconds: 200),
-            child: _isSearch
-                ? SearchTextBox(
-                    onPressed: () {
-                      setState(() {
-                        _isSearch = false;
-                      });
-                    },
-                  )
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 29.0),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 24.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              TextButton(
-                                onPressed: () {
-                                  showModalBottomSheet(
-                                      elevation: 10,
-                                      useSafeArea: true,
-                                      shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(10),
-                                              topRight: Radius.circular(10))),
-                                      isDismissible: true,
-                                      context: context,
-                                      builder: (context) => Wrap(
+    return AnimatedContainer(
+        key: mainPageKey,
+        height: _isSearch ? MediaQuery.of(context).size.height : null,
+        padding: EdgeInsets.only(
+          left: _isSearch ? 10 : 0,
+          top: 23,
+        ),
+        decoration: BoxDecoration(
+            color: HexColor('#2C3848'),
+            borderRadius: _isSearch
+                ? null
+                : const BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30))),
+        duration: const Duration(milliseconds: 200),
+        child: _isSearch
+            ? SearchTextBox(
+                onPressed: () {
+                  setState(() {
+                    _isSearch = false;
+                  });
+                },
+              )
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 29.0),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 24.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              showModalBottomSheet(
+                                  elevation: 10,
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(10))),
+                                  isDismissible: true,
+                                  context: context,
+                                  builder: (context) => Wrap(
+                                        children: [
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  const Padding(
-                                                    padding: EdgeInsets.only(
-                                                        left: 16, top: 20),
-                                                    child: Text(
-                                                      'Features',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          fontSize: 20),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 8.0,
-                                                            left: 7,
-                                                            bottom: 50),
-                                                    child: ListView.builder(
-                                                      shrinkWrap: true,
-                                                      itemCount: modalBottomItem
-                                                          .length,
-                                                      itemBuilder:
-                                                          (context, index) =>
-                                                              SizedBox(
-                                                                  height: 50,
-                                                                  child:
-                                                                      ListTile(
-                                                                    contentPadding:
-                                                                        const EdgeInsets.all(
-                                                                            10),
-                                                                    onTap: () {
-                                                                      setState(
-                                                                          () {
-                                                                        feature =
-                                                                            modalBottomItem[index];
-                                                                      });
-                                                                      Navigator.pop(
-                                                                          context);
-                                                                    },
-                                                                    title: Text(
+                                              const Padding(
+                                                padding: EdgeInsets.only(
+                                                    left: 16, top: 20),
+                                                child: Text(
+                                                  'Features',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 20),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 8.0,
+                                                    left: 7,
+                                                    bottom: 50),
+                                                child: ListView.builder(
+                                                  shrinkWrap: true,
+                                                  itemCount:
+                                                      modalBottomItem.length,
+                                                  itemBuilder:
+                                                      (context, index) =>
+                                                          SizedBox(
+                                                              height: 50,
+                                                              child: ListTile(
+                                                                contentPadding:
+                                                                    const EdgeInsets
+                                                                        .all(10),
+                                                                onTap: () {
+                                                                  setState(() {
+                                                                    feature =
                                                                         modalBottomItem[
-                                                                            index]),
-                                                                  )),
-                                                    ),
-                                                  ),
-                                                ],
-                                              )
+                                                                            index];
+                                                                  });
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                },
+                                                                title: Text(
+                                                                    modalBottomItem[
+                                                                        index]),
+                                                              )),
+                                                ),
+                                              ),
                                             ],
-                                          ));
-                                },
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      feature,
-                                      style: const TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    const Icon(Icons.arrow_drop_down)
-                                  ],
+                                          )
+                                        ],
+                                      ));
+                            },
+                            child: Row(
+                              children: [
+                                Text(
+                                  feature,
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600),
                                 ),
-                              ),
-                            ],
+                                const Icon(Icons.arrow_drop_down)
+                              ],
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                      Container(
-                          height: 330,
-                          padding: const EdgeInsets.only(top: 16, bottom: 30),
-                          child: moviesBuilder(
-                              category: feature, listType: 'listview')),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 22, top: 10),
-                        child: Text(
-                          'Upcoming Movies',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600),
-                        ),
+                    ),
+                  ),
+                  Container(
+                      height: 330,
+                      padding: const EdgeInsets.only(top: 16, bottom: 30),
+                      child: moviesBuilder(
+                          category: feature, listType: 'listview')),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 22, top: 10),
+                    child: Text(
+                      'Upcoming Movies',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 24),
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: moviesBuilder(
+                        category: 'Upcoming',
+                        listType: 'tiles',
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 24),
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: moviesBuilder(
-                            category: 'Upcoming',
-                            listType: 'tiles',
-                          ),
-                        ),
-                      )
-                    ],
-                  )));
+                    ),
+                  )
+                ],
+              ));
   }
 
   FutureBuilder<Object?> moviesBuilder(
