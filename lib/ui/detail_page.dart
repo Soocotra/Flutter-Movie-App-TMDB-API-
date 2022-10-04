@@ -56,23 +56,29 @@ class _DetailPageState extends State<DetailPage> {
     );
   }
 
-  Stack stackLayout(BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+  Widget stackLayout(BuildContext context, AsyncSnapshot<dynamic> snapshot) {
     List<String> genres = [];
     for (int i = 0; i < snapshot.data?.genres.length; i++) {
       genres.add(snapshot.data?.genres[i].name);
     }
-    return Stack(
-      children: [
-        Container(
-          color: Colors.amber,
-          width: MediaQuery.of(context).size.width,
-          child: Image.network(
-            '${ApiConfig.imageUrl}${snapshot.data?.poster_path}',
-            fit: BoxFit.cover,
+    return RefreshIndicator(
+      onRefresh: () {
+        setState(() {});
+        return Future<void>.delayed(const Duration(seconds: 2));
+      },
+      child: Stack(
+        children: [
+          Container(
+            color: Colors.amber,
+            width: MediaQuery.of(context).size.width,
+            child: Image.network(
+              '${ApiConfig.imageUrl}${snapshot.data?.poster_path}',
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        detailMovie(context, snapshot, genres)
-      ],
+          detailMovie(context, snapshot, genres)
+        ],
+      ),
     );
   }
 

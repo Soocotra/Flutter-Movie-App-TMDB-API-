@@ -15,6 +15,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool isSearch = false;
+
   final List<String> modalBottomItem = [
     'Now playing',
     'Top Rated',
@@ -29,8 +30,14 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
         backgroundColor: HexColor('#198ADF'),
         body: SafeArea(
-          child: Column(
-            children: [isSearch ? Container() : homeHeader(), mainPage()],
+          child: RefreshIndicator(
+            onRefresh: () {
+              setState(() {});
+              return Future<void>.delayed(const Duration(seconds: 2));
+            },
+            child: Column(
+              children: [isSearch ? Container() : homeHeader(), mainPage()],
+            ),
           ),
         ));
   }
