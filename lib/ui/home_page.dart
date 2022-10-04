@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:double_back_to_close/double_back_to_close.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -27,19 +30,28 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: HexColor('#198ADF'),
-        body: SafeArea(
-          child: RefreshIndicator(
-            onRefresh: () {
-              setState(() {});
-              return Future<void>.delayed(const Duration(seconds: 2));
-            },
-            child: Column(
-              children: [isSearch ? Container() : homeHeader(), mainPage()],
+    return DoubleBack(
+      condition: isSearch == false,
+      onConditionFail: () {
+        setState(() {
+          isSearch = false;
+        });
+      },
+      message: "Press again to back",
+      child: Scaffold(
+          backgroundColor: HexColor('#198ADF'),
+          body: SafeArea(
+            child: RefreshIndicator(
+              onRefresh: () {
+                setState(() {});
+                return Future<void>.delayed(const Duration(seconds: 2));
+              },
+              child: Column(
+                children: [isSearch ? Container() : homeHeader(), mainPage()],
+              ),
             ),
-          ),
-        ));
+          )),
+    );
   }
 
   Widget homeHeader() {
