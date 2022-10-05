@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             Container(
-              padding: const EdgeInsets.only(top: 22, left: 63, right: 93),
+              padding: const EdgeInsets.only(top: 22, left: 50, right: 50),
               child: Text("Hello, What Do You Want To Discover ?",
                   style: GoogleFonts.montserrat(
                     fontWeight: FontWeight.w600,
@@ -164,83 +164,7 @@ class _HomePageState extends State<HomePage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          TextButton(
-                            onPressed: () {
-                              showModalBottomSheet(
-                                  elevation: 10,
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(10),
-                                          topRight: Radius.circular(10))),
-                                  isDismissible: true,
-                                  context: context,
-                                  builder: (context) => Wrap(
-                                        children: [
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              const Padding(
-                                                padding: EdgeInsets.only(
-                                                    left: 16, top: 20),
-                                                child: Text(
-                                                  'Features',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      fontSize: 20),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 8.0,
-                                                    left: 7,
-                                                    bottom: 50),
-                                                child: ListView.builder(
-                                                  shrinkWrap: true,
-                                                  itemCount:
-                                                      modalBottomItem.length,
-                                                  itemBuilder:
-                                                      (context, index) =>
-                                                          SizedBox(
-                                                              height: 50,
-                                                              child: ListTile(
-                                                                contentPadding:
-                                                                    const EdgeInsets
-                                                                        .all(10),
-                                                                onTap: () {
-                                                                  setState(() {
-                                                                    feature =
-                                                                        modalBottomItem[
-                                                                            index];
-                                                                  });
-                                                                  Navigator.pop(
-                                                                      context);
-                                                                },
-                                                                title: Text(
-                                                                    modalBottomItem[
-                                                                        index]),
-                                                              )),
-                                                ),
-                                              ),
-                                            ],
-                                          )
-                                        ],
-                                      ));
-                            },
-                            child: Row(
-                              children: [
-                                Text(
-                                  feature,
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                const Icon(Icons.arrow_drop_down)
-                              ],
-                            ),
-                          ),
+                          btnBottomSheet(),
                         ],
                       ),
                     ),
@@ -251,7 +175,7 @@ class _HomePageState extends State<HomePage> {
                       child: moviesBuilder(
                           category: feature, listType: 'listview')),
                   const Padding(
-                    padding: EdgeInsets.only(left: 22, top: 10),
+                    padding: EdgeInsets.only(left: 30, top: 10),
                     child: Text(
                       'Upcoming Movies',
                       style: TextStyle(
@@ -272,6 +196,68 @@ class _HomePageState extends State<HomePage> {
                   )
                 ],
               ));
+  }
+
+  TextButton btnBottomSheet() {
+    return TextButton(
+      onPressed: () {
+        showModalBottomSheet(
+            elevation: 10,
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10))),
+            isDismissible: true,
+            context: context,
+            builder: (context) => Wrap(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(left: 16, top: 20),
+                          child: Text(
+                            'Features',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 20),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              top: 8.0, left: 7, bottom: 50),
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: modalBottomItem.length,
+                            itemBuilder: (context, index) => SizedBox(
+                                height: 50,
+                                child: ListTile(
+                                  contentPadding: const EdgeInsets.all(10),
+                                  onTap: () {
+                                    setState(() {
+                                      feature = modalBottomItem[index];
+                                    });
+                                    Navigator.pop(context);
+                                  },
+                                  title: Text(modalBottomItem[index]),
+                                )),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ));
+      },
+      child: Row(
+        children: [
+          Text(
+            feature,
+            style: const TextStyle(
+                fontSize: 16, color: Colors.white, fontWeight: FontWeight.w600),
+          ),
+          const Icon(Icons.arrow_drop_down)
+        ],
+      ),
+    );
   }
 
   FutureBuilder<Object?> moviesBuilder(

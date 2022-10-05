@@ -4,6 +4,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:movie_app/api_config/config.dart';
 import 'package:movie_app/tools/genre_generator.dart';
 import 'package:movie_app/ui/detail_page.dart';
+import 'package:movie_app/ui/see_all.dart';
 import 'package:skeletons/skeletons.dart';
 
 Widget moviesCard(
@@ -86,81 +87,99 @@ Widget movieTiles(AsyncSnapshot<dynamic> snapshot, BuildContext context) =>
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemCount: snapshot.data?.results.length > 5
-          ? 5
+          ? 5 + 1
           : snapshot.data?.resulsts.length,
       itemBuilder: (context, index) {
         return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20),
-          child: ListTile(
-            onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      DetailPage(movieId: snapshot.data?.results[index].id),
-                )),
-            visualDensity: const VisualDensity(vertical: 4),
-            leading: SizedBox(
-              // color: Colors.amber,
-              height: 150.73,
-              width: 101.21,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: CachedNetworkImage(
-                  fit: BoxFit.cover,
-                  imageUrl: snapshot.data?.results[index].backdrop_path == null
-                      ? snapshot.data?.results[index].poster_path == null
-                          ? 'https://play-lh.googleusercontent.com/XXqfqs9irPSjphsMPcC-c6Q4-FY5cd8klw4IdI2lof_Ie-yXaFirqbNDzK2kJ808WXJk=w240-h480-rw'
-                          : '${ApiConfig.imageUrl}${snapshot.data?.results[index].backdrop_path}'
-                      : '${ApiConfig.imageUrl}${snapshot.data?.results[index].backdrop_path}',
-                ),
-              ),
-            ),
-            title: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: 120,
-                  child: Text(
-                    snapshot.data?.results[index].title,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 14, color: Colors.white),
-                  ),
-                ),
-                SizedBox(
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.star,
-                        size: 16,
-                        color: HexColor('#FFF700'),
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      Text(
-                        '${snapshot.data?.results[index].vote_average}',
-                        style: const TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w300,
-                            color: Colors.white),
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
-            subtitle: Text(
-              GenreGenerator.genreReader(
-                  snapshot.data?.results[index].genre_ids,
-                  snapshot.data?.results[index].genre_ids.length),
-              style: const TextStyle(
-                  fontSize: 11,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w300),
-            ),
-          ),
+          padding: const EdgeInsets.only(bottom: 10, top: 10, left: 24),
+          child: index == 5
+              ? TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SeeAll(),
+                        ));
+                  },
+                  child: const Text(
+                    'See All',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600),
+                  ))
+              : singleMovieTiles(context, snapshot, index),
         );
       },
     );
+
+ListTile singleMovieTiles(
+    BuildContext context, AsyncSnapshot<dynamic> snapshot, int index) {
+  return ListTile(
+    onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              DetailPage(movieId: snapshot.data?.results[index].id),
+        )),
+    visualDensity: const VisualDensity(vertical: 4),
+    leading: SizedBox(
+      // color: Colors.amber,
+      height: 150.73,
+      width: 101.21,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(15),
+        child: CachedNetworkImage(
+          fit: BoxFit.cover,
+          imageUrl: snapshot.data?.results[index].backdrop_path == null
+              ? snapshot.data?.results[index].poster_path == null
+                  ? 'https://play-lh.googleusercontent.com/XXqfqs9irPSjphsMPcC-c6Q4-FY5cd8klw4IdI2lof_Ie-yXaFirqbNDzK2kJ808WXJk=w240-h480-rw'
+                  : '${ApiConfig.imageUrl}${snapshot.data?.results[index].backdrop_path}'
+              : '${ApiConfig.imageUrl}${snapshot.data?.results[index].backdrop_path}',
+        ),
+      ),
+    ),
+    title: Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        SizedBox(
+          width: 120,
+          child: Text(
+            snapshot.data?.results[index].title,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(fontSize: 14, color: Colors.white),
+          ),
+        ),
+        SizedBox(
+          child: Row(
+            children: [
+              Icon(
+                Icons.star,
+                size: 16,
+                color: HexColor('#FFF700'),
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              Text(
+                '${(snapshot.data?.results[index].vote_average / 2).toStringAsFixed(1)}',
+                style: const TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w300,
+                    color: Colors.white),
+              )
+            ],
+          ),
+        )
+      ],
+    ),
+    subtitle: Text(
+      GenreGenerator.genreReader(snapshot.data?.results[index].genre_ids,
+          snapshot.data?.results[index].genre_ids.length),
+      style: const TextStyle(
+          fontSize: 11, color: Colors.white, fontWeight: FontWeight.w300),
+    ),
+  );
+}

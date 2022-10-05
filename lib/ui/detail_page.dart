@@ -95,7 +95,7 @@ class _DetailPageState extends State<DetailPage> {
                     colors: [HexColor('#2C3848'), Colors.transparent],
                     begin: Alignment.center,
                     end: Alignment.topCenter,
-                    stops: [0.4, 1])
+                    stops: const [0.4, 1])
                 .createShader(Rect.fromLTRB(0, 0, bounds.width, bounds.height)),
             blendMode: BlendMode.dstIn,
             child: Stack(
@@ -268,7 +268,7 @@ class _DetailPageState extends State<DetailPage> {
           width: 5,
         ),
         Text(
-          '${(snapshot.data?.vote_average / 2).toStringAsFixed(1)}',
+          '${(snapshot.data?.vote_average).toStringAsFixed(1)}',
           style: const TextStyle(color: Colors.white, fontSize: 11),
         )
       ],
